@@ -1,0 +1,50 @@
+const express = require("express");
+const app = express();
+const port = 8080;
+
+function readTextFile(file, callback) {
+    fetch(file)
+        .then(response => {
+            if (!response.ok) {
+                throw new Error(`HTTP error! status: ${response.status}`);
+            }
+            return response.text();
+        })
+        .then(text => callback(text))
+        .catch(error => console.error('Error fetching file:', error));
+}   
+
+app.get("/", (req, res) => {
+  readTextFile("https://ferr-ffk.github.io/api-medicamentos/medicamentos.json", function(text){
+    const data = JSON.parse(text);
+
+    res.send(data); // Sends the data after fetching it
+  });
+});
+
+app.get("/:nome", (req, res) => {
+    const nome = req.params.nome;
+
+    console.log("Pesquisa por medicamento:", nome);
+
+    readTextFile("https://ferr-ffk.github.io/api-medicamentos/medicamentos.json", function(text){
+        const data = JSON.parse(text);
+
+        console.log("Dados carregados:", data.length, "medicamentos encontrados");
+
+        let possiveisMedicamentos = [];
+
+        for (let i = 0; i < data.length; i++) {
+            if (data[i]['NOME_PRODUTO'].toLowerCase().includes(nome.toLowerCase())) {
+                possiveisMedicamentos.push(data[i]);
+            }
+        }
+    
+        res.json(possiveisMedicamentos);
+    });
+    
+});
+
+app.listen(port, () => {
+  console.log(`Server listening at http://localhost:${port}`);
+});
