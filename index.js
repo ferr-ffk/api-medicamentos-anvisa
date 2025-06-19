@@ -24,7 +24,7 @@ app.get("/", (req, res) => {
 
 app.get("/:nome", (req, res) => {
     const nome = req.params.nome;
-    
+
     if (nome === "favicon.ico") {
         res.status(204).send(); // No content for favicon requests
 
@@ -54,3 +54,5 @@ app.get("/:nome", (req, res) => {
 app.listen(port, () => {
   console.log(`Server listening at http://localhost:${port}`);
 });
+
+module.exports = app; // Export the app for testing purposes
