@@ -24,6 +24,12 @@ app.get("/", (req, res) => {
 
 app.get("/:nome", (req, res) => {
     const nome = req.params.nome;
+    
+    if (nome === "favicon.ico") {
+        res.status(204).send(); // No content for favicon requests
+
+        return;
+    }
 
     console.log("Pesquisa por medicamento:", nome);
 
