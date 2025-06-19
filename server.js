@@ -1,5 +1,5 @@
-const express = require("express");
-const cors = require('cors')
+import express from "express";
+import cors from 'cors';
 
 const app = express();
 const port = 8080;
@@ -59,4 +59,4 @@ app.listen(port, () => {
   console.log(`Server listening at http://localhost:${port}`);
 });
 
-module.exports = app; // Export the app for testing purposes
+export default app; // Export the app for testing purposes
