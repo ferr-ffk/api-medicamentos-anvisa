@@ -54,9 +54,7 @@ curl "https://api-medicamentos-anvisa.vercel.app/dipirona?limit=2"
          "LABORATORIO": "XYZ FARMA",
          "REGISTRO": "123456789",
          "PRINCIPIO_ATIVO": "Dipirona Sódica"
-         /* ... */
     }
-    /* ... */
 ]
 ```
 
