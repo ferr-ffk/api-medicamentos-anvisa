@@ -1,4 +1,11 @@
 {
+  "name": "api-medicamentos-anvisa",
+  "version": "1.0.0",
+  "author": {
+    "name": "Fernando Freitas",
+    "email": "freitaslira18@gmail.com"
+  },
+  "type": "module",
   "dependencies": {
     "cors": "^2.8.5",
     "express": "^5.1.0",
