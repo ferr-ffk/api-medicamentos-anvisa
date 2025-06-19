@@ -33,18 +33,18 @@ app.get("/:nome", (req, res) => {
 
     console.log("Pesquisa por medicamento:", nome);
 
-    readTextFile("https://ferr-ffk.github.io/api-medicamentos/medicamentos.json", function(text){
+    readTextFile("https://ferr-ffk.github.io/medicamentos/medicamentos.json", function(text){
         const data = JSON.parse(text);
 
         console.log("Dados carregados:", data.length, "medicamentos encontrados");
 
         let possiveisMedicamentos = [];
 
-        for (let i = 0; i < data.length; i++) {
-            if (data[i]['NOME_PRODUTO'].toLowerCase().includes(nome.toLowerCase())) {
-                possiveisMedicamentos.push(data[i]);
+        data.forEach((medicamento) => {
+            if (medicamento['NOME_PRODUTO'].toLowerCase().includes(nome.toLowerCase())) {
+                possiveisMedicamentos.push(medicamento);
             }
-        }
+        });
     
         res.json(possiveisMedicamentos);
     });
