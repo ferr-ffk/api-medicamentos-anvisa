@@ -43,13 +43,20 @@ app.get("/:nome", (req, res) => {
         console.log("Dados carregados:", data.length, "medicamentos encontrados");
 
         let possiveisMedicamentos = [];
+        let limit = 0;
 
         data.forEach((medicamento) => {
             if (medicamento['NOME_PRODUTO'].toLowerCase().includes(nome.toLowerCase())) {
                 possiveisMedicamentos.push(medicamento);
             }
         });
-    
+
+        if (req.query.limit > 0) {
+            limit = parseInt(req.query.limit);
+
+            possiveisMedicamentos = possiveisMedicamentos.slice(0, limit);
+        }
+
         res.json(possiveisMedicamentos);
     });
     
