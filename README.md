@@ -65,4 +65,4 @@ curl "https://api-medicamentos-anvisa.vercel.app/dipirona?limit=2"
 
 ## Licença
 
-MIT
+GNU Public License 3.0
