@@ -58,6 +58,37 @@ curl "https://api-medicamentos-anvisa.vercel.app/dipirona?limit=2"
 ]
 ```
 
+### 4. Buscar medicamentos com resultados simplificados
+
+- **Endpoint:** `/:nome?simplified`
+- **Método:** `GET`
+- **Descrição:** Retorna apenas os campos `TIPO_PRODUTO` e `NOME_PRODUTO`.
+
+**Exemplo de uso:**
+```bash
+curl "https://api-medicamentos-anvisa.vercel.app/amoxicilina?simplified"
+```
+
+## Exemplo de resposta 
+
+```json
+[
+ {
+    "TIPO_PRODUTO": "MEDICAMENTO",
+    "NOME_PRODUTO": "AMOXICILINA"
+  },
+  {
+    "TIPO_PRODUTO": "MEDICAMENTO",
+    "NOME_PRODUTO": "AMOXICILINA (TRIHIDRATADA)"
+  },
+  {
+    "TIPO_PRODUTO": "MEDICAMENTO",
+    "NOME_PRODUTO": "AMOXICILINA + AC. CLAVULANICO"
+  },
+  /* ... */
+]
+```
+
 ## Observações
 
 - O parâmetro `limit` é opcional e limita a quantidade de itens retornados.
