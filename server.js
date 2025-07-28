@@ -96,6 +96,37 @@ app.get("/:nome", (req, res) => {
 
 });
 
+app.get("/vacinas", (req, res) => {
+    readTextFile("./vacinas.json", function(text) {
+        const data = JSON.parse(text);
+        res.send(data);
+    });
+});
+
+app.get("/vacinas/:nome", (req, res) => {
+    const nome = req.params.nome;
+
+    if (nome === "favicon.ico") {
+        res.status(204).send(); // No content for favicon requests
+        return;
+    }
+
+    console.log("Pesquisa por vacina:", nome);
+
+    readTextFile("./vacinas.json", function(text) {
+        const data = JSON.parse(text);
+        let possiveisVacinas = [];
+
+        data.forEach((vacina) => {
+            if (vacina['NOME_PRODUTO'].toLowerCase().includes(nome.toLowerCase())) {
+                possiveisVacinas.push(vacina);
+            }
+        });
+
+        res.json(possiveisVacinas);
+    });
+});
+
 app.listen(port, () => {
   console.log(`Server listening at http://localhost:${port}`);
 });
