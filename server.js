@@ -1,5 +1,6 @@
 import express from "express";
 import cors from 'cors';
+import fs from 'fs';
 
 const app = express();
 const port = 8080;
@@ -7,19 +8,18 @@ const port = 8080;
 app.use(cors())
 
 function readTextFile(file, callback) {
-    fetch(file, { method: 'GET', headers: { 'Content-Type': 'text/plain' } })
-        .then(response => {
-            if (!response.ok) {
-                throw new Error(`HTTP error! status: ${response.status}`);
-            }
-            return response.text();
-        })
-        .then(text => callback(text))
-        .catch(error => console.error('Error fetching file:', error));
+    fs.readFile(file, 'utf8', (err, data) => {
+        if (err) {
+            console.error("Error reading file:", err);
+            callback("[]");
+            return;
+        }
+        callback(data);
+    });
 }   
 
 app.get("/", (req, res) => {
-  readTextFile("https://ferr-ffk.github.io/api-medicamentos/medicamentos.json", function(text){
+  readTextFile("./medicamentos.json", function(text){
     const data = JSON.parse(text);
 
     res.send(data); // Sends the data after fetching it
@@ -40,7 +40,7 @@ app.get("/:nome", (req, res) => {
     console.log("Simplified:", simplified);
 
     if (simplified) {
-        readTextFile("https://ferr-ffk.github.io/medicamentos/medicamentos-reduzido.json", function(text){
+        readTextFile("./medicamentos-reduzido.json", function(text){
             const data = JSON.parse(text);
     
             console.log("Dados carregados:", data.length, "medicamentos encontrados");
@@ -69,7 +69,7 @@ app.get("/:nome", (req, res) => {
     }
 
 
-    readTextFile("https://ferr-ffk.github.io/medicamentos/medicamentos.json", function(text){
+    readTextFile("./medicamentos.json", function(text){
         const data = JSON.parse(text);
 
         console.log("Dados carregados:", data.length, "medicamentos encontrados");
