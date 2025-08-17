@@ -3,7 +3,7 @@ import cors from 'cors';
 
 const app = express();
 const port = 8080;
-const apiUrl = "https://raw.githubusercontent.com/ferr-ffk/medicamentos/refs/heads/master/"
+const apiUrl = "https://ferr-ffk.github.io/medicamentos/"
 
 app.use(cors())
 
