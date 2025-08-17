@@ -4,22 +4,22 @@ import fs from 'fs';
 
 const app = express();
 const port = 8080;
+const apiUrl = "https://raw.githubusercontent.com/ferr-ffk/medicamentos/refs/heads/master/"
 
 app.use(cors())
 
 function readTextFile(file, callback) {
-    fs.readFile(file, 'utf8', (err, data) => {
-        if (err) {
-            console.error("Error reading file:", err);
+    fetch(apiUrl + file)
+        .then(response => response.text())
+        .then(data => callback(data))
+        .catch(error => {
+            console.error("Error fetching file:", error);
             callback("[]");
-            return;
-        }
-        callback(data);
-    });
+        });
 }   
 
 app.get("/", (req, res) => {
-  readTextFile("./medicamentos.json", function(text){
+  readTextFile("medicamentos.json", function(text){
     const data = JSON.parse(text);
 
     res.send(data); // Sends the data after fetching it
@@ -40,7 +40,7 @@ app.get("/:nome", (req, res) => {
     console.log("Simplified:", simplified);
 
     if (simplified) {
-        readTextFile("./medicamentos-reduzido.json", function(text){
+        readTextFile("medicamentos-reduzido.json", function(text){
             const data = JSON.parse(text);
     
             console.log("Dados carregados:", data.length, "medicamentos encontrados");
@@ -69,7 +69,7 @@ app.get("/:nome", (req, res) => {
     }
 
 
-    readTextFile("./medicamentos.json", function(text){
+    readTextFile("medicamentos.json", function(text){
         const data = JSON.parse(text);
 
         console.log("Dados carregados:", data.length, "medicamentos encontrados");
@@ -97,7 +97,7 @@ app.get("/:nome", (req, res) => {
 });
 
 app.get("/vacinas", (req, res) => {
-    readTextFile("./vacinas.json", function(text) {
+    readTextFile("vacinas.json", function(text) {
         const data = JSON.parse(text);
         res.send(data);
     });
@@ -113,7 +113,7 @@ app.get("/vacinas/:nome", (req, res) => {
 
     console.log("Pesquisa por vacina:", nome);
 
-    readTextFile("./vacinas.json", function(text) {
+    readTextFile("vacinas.json", function(text) {
         const data = JSON.parse(text);
         let possiveisVacinas = [];
 
