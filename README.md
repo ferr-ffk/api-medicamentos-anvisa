@@ -47,7 +47,7 @@ curl "https://api-medicamentos-anvisa.vercel.app/dipirona?limit=2"
 
 ## Exemplo de resposta
 
-```json
+```javascript
 [
     {
          "NOME_PRODUTO": "DIPIRONA SÓDICA",
@@ -66,12 +66,12 @@ curl "https://api-medicamentos-anvisa.vercel.app/dipirona?limit=2"
 
 **Exemplo de uso:**
 ```bash
-curl "https://api-medicamentos-anvisa.vercel.app/amoxicilina?simplified"
+curl "https://api-medicamentos-anvisa.vercel.app/amoxicilina?simplified=true"
 ```
 
 ## Exemplo de resposta 
 
-```json
+```javascript
 [
  {
     "TIPO_PRODUTO": "MEDICAMENTO",
