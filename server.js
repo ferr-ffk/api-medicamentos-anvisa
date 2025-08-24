@@ -61,10 +61,10 @@ app.get("/:nome", (req, res) => {
 
             console.log("Possíveis medicamentos encontrados:", possiveisMedicamentos.length);
     
-            res.json(possiveisMedicamentos);
-        });
+            res.json(possiveisMedicamentos.sort((a, b) => a['NOME_PRODUTO'].length - b['NOME_PRODUTO'].length));
 
-        return;
+            return;
+        });
     }
 
 
@@ -88,11 +88,12 @@ app.get("/:nome", (req, res) => {
             possiveisMedicamentos = possiveisMedicamentos.slice(0, limit);
         }
 
-        res.json(possiveisMedicamentos);
+        console.log("Possíveis medicamentos encontrados:", possiveisMedicamentos.length);
+
+        res.json(possiveisMedicamentos.sort((a, b) => a['NOME_PRODUTO'].length - b['NOME_PRODUTO'].length));
 
         return;
     });
-
 });
 
 app.get("/vacinas", (req, res) => {
