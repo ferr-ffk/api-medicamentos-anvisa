@@ -1,11 +1,37 @@
 import express from "express";
 import cors from 'cors';
+import Fuse from "fuse.js";
 
 const app = express();
 const port = 8080;
 const apiUrl = "https://ferr-ffk.github.io/medicamentos/"
 
+const options = {
+    keys: ["NOME_PRODUTO"], // campos a pesquisar
+    threshold: 0.3 // sensibilidade da busca (0 = exato, 1 = super flexível)
+};
+
 app.use(cors())
+
+function procurarMedicamento(med, data) {
+    possiveisMedicamentos = [];
+
+    data.forEach((medicamento) => {
+        if (medicamento['NOME_PRODUTO'].toLowerCase().includes(med.toLowerCase())) {
+            possiveisMedicamentos.push(medicamento);
+        }
+    });
+
+    return possiveisMedicamentos.sort((a, b) => a['NOME_PRODUTO'].length - b['NOME_PRODUTO'].length);
+}
+
+function procurarMedicamentoFuse(med, data) {
+    const fuse = new Fuse(data, options);
+
+    const resultado = fuse.search(med);
+
+    return resultado.map((item) => item.item);
+}
 
 function readJsonFile(file, callback) {
     fetch(apiUrl + file)
@@ -43,15 +69,9 @@ app.get("/:nome", (req, res) => {
             const data = JSON.parse(text);
     
             console.log("Dados carregados:", data.length, "medicamentos encontrados");
-    
-            let possiveisMedicamentos = [];
+
+            let possiveisMedicamentos = procurarMedicamentoFuse(nome, data);
             let limit = 0;
-    
-            data.forEach((medicamento) => {
-                if (medicamento['NOME_PRODUTO'].toLowerCase().includes(nome.toLowerCase())) {
-                    possiveisMedicamentos.push(medicamento);
-                }
-            });
     
             if (req.query.limit > 0) {
                 limit = parseInt(req.query.limit);
@@ -61,7 +81,7 @@ app.get("/:nome", (req, res) => {
 
             console.log("Possíveis medicamentos encontrados:", possiveisMedicamentos.length);
     
-            res.json(possiveisMedicamentos.sort((a, b) => a['NOME_PRODUTO'].length - b['NOME_PRODUTO'].length));
+            res.json(possiveisMedicamentos);
 
             return;
         });
@@ -73,24 +93,11 @@ app.get("/:nome", (req, res) => {
 
         console.log("Dados carregados:", data.length, "medicamentos encontrados");
 
-        let possiveisMedicamentos = [];
-        let limit = 0;
-
-        data.forEach((medicamento) => {
-            if (medicamento['NOME_PRODUTO'].toLowerCase().includes(nome.toLowerCase())) {
-                possiveisMedicamentos.push(medicamento);
-            }
-        });
-
-        if (req.query.limit > 0) {
-            limit = parseInt(req.query.limit);
-
-            possiveisMedicamentos = possiveisMedicamentos.slice(0, limit);
-        }
+        let possiveisMedicamentos = procurarMedicamentoFuse(nome, data);
 
         console.log("Possíveis medicamentos encontrados:", possiveisMedicamentos.length);
 
-        res.json(possiveisMedicamentos.sort((a, b) => a['NOME_PRODUTO'].length - b['NOME_PRODUTO'].length));
+        res.json(possiveisMedicamentos);
 
         return;
     });
